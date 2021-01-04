@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+       <title>莆田系医院地理分布</title>
+       <!--
+            日期: 2020-12-28
+            描述: Echarts地图Demo
+        -->
+   </head>
+
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
+       <script type="text/javascript" src="../js/theme/dark.js"></script>
+       <script type="text/javascript">
+
+       
+//初始化
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+var cnDataset = []
+var cnDataset2 = []
+var tmp = []
+option = null;
+
+var cnDataset = {'timeline':[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,
+                             2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],
+'totalseries':[
+[{'name':'安徽','value':0},{'name':'北京','value':2},{'name':'福建','value':0},{'name':'甘肃','value':0},{'name':'广东','value':0},{'name':'广西','value':0},{'name':'贵州','value':0},{'name':'海南','value':0},{'name':'河北','value':0},{'name':'河南','value':0},{'name':'黑龙江','value':1},{'name':'湖北','value':1},{'name':'湖南','value':0},{'name':'吉林','value':0},{'name':'江苏','value':1},{'name':'江西','value':0},{'name':'辽宁','value':0},{'name':'青海','value':0},{'name':'山东','value':0},{'name':'山西','value':0},{'name':'陕西','value':0},{'name':'上海','value':3},{'name':'四川','value':0},{'name':'天津','value':0},{'name':'西藏','value':0},{'name':'新疆','value':0},{'name':'云南','value':1},{'name':'浙江','value':2},{'name':'重庆','value':0},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':0},{'name':'北京','value':2},{'name':'福建','value':0},{'name':'甘肃','value':0},{'name':'广东','value':0},{'name':'广西','value':0},{'name':'贵州','value':0},{'name':'海南','value':0},{'name':'河北','value':0},{'name':'河南','value':0},{'name':'黑龙江','value':1},{'name':'湖北','value':2},{'name':'湖南','value':0},{'name':'吉林','value':0},{'name':'江苏','value':4},{'name':'江西','value':0},{'name':'辽宁','value':0},{'name':'青海','value':0},{'name':'山东','value':0},{'name':'山西','value':0},{'name':'陕西','value':0},{'name':'上海','value':4},{'name':'四川','value':0},{'name':'天津','value':0},{'name':'西藏','value':0},{'name':'新疆','value':2},{'name':'云南','value':1},{'name':'浙江','value':2},{'name':'重庆','value':0},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':0},{'name':'北京','value':3},{'name':'福建','value':2},{'name':'甘肃','value':0},{'name':'广东','value':1},{'name':'广西','value':0},{'name':'贵州','value':0},{'name':'海南','value':0},{'name':'河北','value':1},{'name':'河南','value':0},{'name':'黑龙江','value':1},{'name':'湖北','value':2},{'name':'湖南','value':1},{'name':'吉林','value':0},{'name':'江苏','value':7},{'name':'江西','value':0},{'name':'辽宁','value':0},{'name':'青海','value':0},{'name':'山东','value':1},{'name':'山西','value':1},{'name':'陕西','value':0},{'name':'上海','value':7},{'name':'四川','value':1},{'name':'天津','value':0},{'name':'西藏','value':0},{'name':'新疆','value':2},{'name':'云南','value':2},{'name':'浙江','value':2},{'name':'重庆','value':0},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':0},{'name':'北京','value':5},{'name':'福建','value':3},{'name':'甘肃','value':0},{'name':'广东','value':1},{'name':'广西','value':1},{'name':'贵州','value':2},{'name':'海南','value':0},{'name':'河北','value':1},{'name':'河南','value':0},{'name':'黑龙江','value':1},{'name':'湖北','value':2},{'name':'湖南','value':4},{'name':'吉林','value':0},{'name':'江苏','value':7},{'name':'江西','value':0},{'name':'辽宁','value':0},{'name':'青海','value':0},{'name':'山东','value':1},{'name':'山西','value':4},{'name':'陕西','value':0},{'name':'上海','value':17},{'name':'四川','value':4},{'name':'天津','value':0},{'name':'西藏','value':0},{'name':'新疆','value':2},{'name':'云南','value':3},{'name':'浙江','value':3},{'name':'重庆','value':0},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':0},{'name':'北京','value':12},{'name':'福建','value':4},{'name':'甘肃','value':0},{'name':'广东','value':3},{'name':'广西','value':1},{'name':'贵州','value':2},{'name':'海南','value':0},{'name':'河北','value':3},{'name':'河南','value':1},{'name':'黑龙江','value':2},{'name':'湖北','value':5},{'name':'湖南','value':5},{'name':'吉林','value':0},{'name':'江苏','value':10},{'name':'江西','value':0},{'name':'辽宁','value':0},{'name':'青海','value':0},{'name':'山东','value':1},{'name':'山西','value':5},{'name':'陕西','value':0},{'name':'上海','value':25},{'name':'四川','value':5},{'name':'天津','value':0},{'name':'西藏','value':0},{'name':'新疆','value':2},{'name':'云南','value':5},{'name':'浙江','value':8},{'name':'重庆','value':0},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':0},{'name':'北京','value':15},{'name':'福建','value':6},{'name':'甘肃','value':0},{'name':'广东','value':5},{'name':'广西','value':1},{'name':'贵州','value':3},{'name':'海南','value':1},{'name':'河北','value':4},{'name':'河南','value':1},{'name':'黑龙江','value':2},{'name':'湖北','value':8},{'name':'湖南','value':5},{'name':'吉林','value':0},{'name':'江苏','value':16},{'name':'江西','value':0},{'name':'辽宁','value':0},{'name':'青海','value':0},{'name':'山东','value':2},{'name':'山西','value':9},{'name':'陕西','value':0},{'name':'上海','value':37},{'name':'四川','value':8},{'name':'天津','value':0},{'name':'西藏','value':0},{'name':'新疆','value':2},{'name':'云南','value':7},{'name':'浙江','value':17},{'name':'重庆','value':1},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':1},{'name':'北京','value':19},{'name':'福建','value':8},{'name':'甘肃','value':0},{'name':'广东','value':6},{'name':'广西','value':1},{'name':'贵州','value':3},{'name':'海南','value':1},{'name':'河北','value':4},{'name':'河南','value':1},{'name':'黑龙江','value':4},{'name':'湖北','value':11},{'name':'湖南','value':5},{'name':'吉林','value':0},{'name':'江苏','value':21},{'name':'江西','value':1},{'name':'辽宁','value':0},{'name':'青海','value':0},{'name':'山东','value':2},{'name':'山西','value':10},{'name':'陕西','value':0},{'name':'上海','value':38},{'name':'四川','value':11},{'name':'天津','value':0},{'name':'西藏','value':0},{'name':'新疆','value':3},{'name':'云南','value':8},{'name':'浙江','value':21},{'name':'重庆','value':2},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':2},{'name':'北京','value':20},{'name':'福建','value':10},{'name':'甘肃','value':0},{'name':'广东','value':7},{'name':'广西','value':5},{'name':'贵州','value':4},{'name':'海南','value':1},{'name':'河北','value':5},{'name':'河南','value':2},{'name':'黑龙江','value':5},{'name':'湖北','value':12},{'name':'湖南','value':6},{'name':'吉林','value':1},{'name':'江苏','value':23},{'name':'江西','value':2},{'name':'辽宁','value':0},{'name':'青海','value':0},{'name':'山东','value':2},{'name':'山西','value':11},{'name':'陕西','value':0},{'name':'上海','value':42},{'name':'四川','value':15},{'name':'天津','value':0},{'name':'西藏','value':0},{'name':'新疆','value':4},{'name':'云南','value':10},{'name':'浙江','value':21},{'name':'重庆','value':2},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':2},{'name':'北京','value':23},{'name':'福建','value':11},{'name':'甘肃','value':0},{'name':'广东','value':12},{'name':'广西','value':5},{'name':'贵州','value':5},{'name':'海南','value':1},{'name':'河北','value':7},{'name':'河南','value':2},{'name':'黑龙江','value':7},{'name':'湖北','value':18},{'name':'湖南','value':7},{'name':'吉林','value':1},{'name':'江苏','value':31},{'name':'江西','value':3},{'name':'辽宁','value':1},{'name':'青海','value':0},{'name':'山东','value':4},{'name':'山西','value':12},{'name':'陕西','value':0},{'name':'上海','value':51},{'name':'四川','value':20},{'name':'天津','value':0},{'name':'西藏','value':0},{'name':'新疆','value':4},{'name':'云南','value':15},{'name':'浙江','value':24},{'name':'重庆','value':4},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':4},{'name':'北京','value':26},{'name':'福建','value':13},{'name':'甘肃','value':1},{'name':'广东','value':17},{'name':'广西','value':6},{'name':'贵州','value':7},{'name':'海南','value':1},{'name':'河北','value':5},{'name':'河南','value':4},{'name':'黑龙江','value':8},{'name':'湖北','value':24},{'name':'湖南','value':8},{'name':'吉林','value':1},{'name':'江苏','value':37},{'name':'江西','value':3},{'name':'辽宁','value':1},{'name':'青海','value':0},{'name':'山东','value':7},{'name':'山西','value':14},{'name':'陕西','value':0},{'name':'上海','value':54},{'name':'四川','value':25},{'name':'天津','value':1},{'name':'西藏','value':0},{'name':'新疆','value':4},{'name':'云南','value':16},{'name':'浙江','value':24},{'name':'重庆','value':8},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':4},{'name':'北京','value':31},{'name':'福建','value':15},{'name':'甘肃','value':1},{'name':'广东','value':21},{'name':'广西','value':6},{'name':'贵州','value':7},{'name':'海南','value':1},{'name':'河北','value':4},{'name':'河南','value':7},{'name':'黑龙江','value':9},{'name':'湖北','value':27},{'name':'湖南','value':10},{'name':'吉林','value':1},{'name':'江苏','value':40},{'name':'江西','value':2},{'name':'辽宁','value':1},{'name':'青海','value':1},{'name':'山东','value':9},{'name':'山西','value':14},{'name':'陕西','value':1},{'name':'上海','value':55},{'name':'四川','value':27},{'name':'天津','value':1},{'name':'西藏','value':0},{'name':'新疆','value':4},{'name':'云南','value':17},{'name':'浙江','value':24},{'name':'重庆','value':12},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':5},{'name':'北京','value':36},{'name':'福建','value':15},{'name':'甘肃','value':2},{'name':'广东','value':27},{'name':'广西','value':8},{'name':'贵州','value':6},{'name':'海南','value':1},{'name':'河北','value':4},{'name':'河南','value':9},{'name':'黑龙江','value':9},{'name':'湖北','value':30},{'name':'湖南','value':10},{'name':'吉林','value':1},{'name':'江苏','value':50},{'name':'江西','value':2},{'name':'辽宁','value':1},{'name':'青海','value':1},{'name':'山东','value':12},{'name':'山西','value':14},{'name':'陕西','value':2},{'name':'上海','value':57},{'name':'四川','value':29},{'name':'天津','value':1},{'name':'西藏','value':0},{'name':'新疆','value':4},{'name':'云南','value':17},{'name':'浙江','value':24},{'name':'重庆','value':12},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':6},{'name':'北京','value':41},{'name':'福建','value':15},{'name':'甘肃','value':2},{'name':'广东','value':37},{'name':'广西','value':8},{'name':'贵州','value':8},{'name':'海南','value':1},{'name':'河北','value':4},{'name':'河南','value':12},{'name':'黑龙江','value':9},{'name':'湖北','value':31},{'name':'湖南','value':10},{'name':'吉林','value':1},{'name':'江苏','value':56},{'name':'江西','value':5},{'name':'辽宁','value':1},{'name':'青海','value':1},{'name':'山东','value':12},{'name':'山西','value':14},{'name':'陕西','value':2},{'name':'上海','value':62},{'name':'四川','value':31},{'name':'天津','value':1},{'name':'西藏','value':0},{'name':'新疆','value':4},{'name':'云南','value':19},{'name':'浙江','value':28},{'name':'重庆','value':11},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':7},{'name':'北京','value':42},{'name':'福建','value':17},{'name':'甘肃','value':2},{'name':'广东','value':43},{'name':'广西','value':8},{'name':'贵州','value':8},{'name':'海南','value':1},{'name':'河北','value':4},{'name':'河南','value':11},{'name':'黑龙江','value':9},{'name':'湖北','value':35},{'name':'湖南','value':12},{'name':'吉林','value':1},{'name':'江苏','value':61},{'name':'江西','value':5},{'name':'辽宁','value':1},{'name':'青海','value':1},{'name':'山东','value':17},{'name':'山西','value':14},{'name':'陕西','value':2},{'name':'上海','value':64},{'name':'四川','value':36},{'name':'天津','value':1},{'name':'西藏','value':0},{'name':'新疆','value':4},{'name':'云南','value':24},{'name':'浙江','value':29},{'name':'重庆','value':12},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':16},{'name':'北京','value':45},{'name':'福建','value':18},{'name':'甘肃','value':2},{'name':'广东','value':48},{'name':'广西','value':11},{'name':'贵州','value':8},{'name':'海南','value':1},{'name':'河北','value':6},{'name':'河南','value':11},{'name':'黑龙江','value':9},{'name':'湖北','value':39},{'name':'湖南','value':15},{'name':'吉林','value':1},{'name':'江苏','value':68},{'name':'江西','value':6},{'name':'辽宁','value':3},{'name':'青海','value':1},{'name':'山东','value':21},{'name':'山西','value':14},{'name':'陕西','value':2},{'name':'上海','value':68},{'name':'四川','value':44},{'name':'天津','value':4},{'name':'西藏','value':0},{'name':'新疆','value':4},{'name':'云南','value':28},{'name':'浙江','value':33},{'name':'重庆','value':16},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':16},{'name':'北京','value':51},{'name':'福建','value':22},{'name':'甘肃','value':3},{'name':'广东','value':57},{'name':'广西','value':12},{'name':'贵州','value':8},{'name':'海南','value':1},{'name':'河北','value':7},{'name':'河南','value':12},{'name':'黑龙江','value':9},{'name':'湖北','value':47},{'name':'湖南','value':15},{'name':'吉林','value':1},{'name':'江苏','value':71},{'name':'江西','value':7},{'name':'辽宁','value':5},{'name':'青海','value':1},{'name':'山东','value':31},{'name':'山西','value':14},{'name':'陕西','value':4},{'name':'上海','value':73},{'name':'四川','value':49},{'name':'天津','value':4},{'name':'西藏','value':0},{'name':'新疆','value':4},{'name':'云南','value':30},{'name':'浙江','value':37},{'name':'重庆','value':18},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':17},{'name':'北京','value':53},{'name':'福建','value':25},{'name':'甘肃','value':3},{'name':'广东','value':69},{'name':'广西','value':12},{'name':'贵州','value':8},{'name':'海南','value':1},{'name':'河北','value':8},{'name':'河南','value':12},{'name':'黑龙江','value':9},{'name':'湖北','value':51},{'name':'湖南','value':20},{'name':'吉林','value':1},{'name':'江苏','value':79},{'name':'江西','value':7},{'name':'辽宁','value':5},{'name':'青海','value':1},{'name':'山东','value':40},{'name':'山西','value':13},{'name':'陕西','value':4},{'name':'上海','value':74},{'name':'四川','value':52},{'name':'天津','value':7},{'name':'西藏','value':0},{'name':'新疆','value':4},{'name':'云南','value':29},{'name':'浙江','value':37},{'name':'重庆','value':21},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':18},{'name':'北京','value':54},{'name':'福建','value':24},{'name':'甘肃','value':3},{'name':'广东','value':73},{'name':'广西','value':13},{'name':'贵州','value':8},{'name':'海南','value':1},{'name':'河北','value':7},{'name':'河南','value':14},{'name':'黑龙江','value':10},{'name':'湖北','value':59},{'name':'湖南','value':22},{'name':'吉林','value':2},{'name':'江苏','value':85},{'name':'江西','value':11},{'name':'辽宁','value':5},{'name':'青海','value':1},{'name':'山东','value':43},{'name':'山西','value':13},{'name':'陕西','value':5},{'name':'上海','value':79},{'name':'四川','value':56},{'name':'天津','value':7},{'name':'西藏','value':1},{'name':'新疆','value':4},{'name':'云南','value':30},{'name':'浙江','value':39},{'name':'重庆','value':25},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':20},{'name':'北京','value':57},{'name':'福建','value':27},{'name':'甘肃','value':3},{'name':'广东','value':82},{'name':'广西','value':14},{'name':'贵州','value':11},{'name':'海南','value':2},{'name':'河北','value':17},{'name':'河南','value':12},{'name':'黑龙江','value':11},{'name':'湖北','value':63},{'name':'湖南','value':22},{'name':'吉林','value':5},{'name':'江苏','value':93},{'name':'江西','value':12},{'name':'辽宁','value':5},{'name':'青海','value':1},{'name':'山东','value':45},{'name':'山西','value':15},{'name':'陕西','value':5},{'name':'上海','value':82},{'name':'四川','value':54},{'name':'天津','value':8},{'name':'西藏','value':1},{'name':'新疆','value':6},{'name':'云南','value':29},{'name':'浙江','value':40},{'name':'重庆','value':26},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':22},{'name':'北京','value':60},{'name':'福建','value':29},{'name':'甘肃','value':3},{'name':'广东','value':89},{'name':'广西','value':14},{'name':'贵州','value':12},{'name':'海南','value':2},{'name':'河北','value':18},{'name':'河南','value':13},{'name':'黑龙江','value':11},{'name':'湖北','value':64},{'name':'湖南','value':24},{'name':'吉林','value':5},{'name':'江苏','value':97},{'name':'江西','value':15},{'name':'辽宁','value':9},{'name':'青海','value':2},{'name':'山东','value':43},{'name':'山西','value':17},{'name':'陕西','value':5},{'name':'上海','value':89},{'name':'四川','value':59},{'name':'天津','value':11},{'name':'西藏','value':1},{'name':'新疆','value':6},{'name':'云南','value':29},{'name':'浙江','value':46},{'name':'重庆','value':28},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+[{'name':'安徽','value':21},{'name':'北京','value':59},{'name':'福建','value':30},{'name':'甘肃','value':3},{'name':'广东','value':90},{'name':'广西','value':14},{'name':'贵州','value':12},{'name':'海南','value':3},{'name':'河北','value':18},{'name':'河南','value':13},{'name':'黑龙江','value':11},{'name':'湖北','value':63},{'name':'湖南','value':25},{'name':'吉林','value':5},{'name':'江苏','value':97},{'name':'江西','value':13},{'name':'辽宁','value':9},{'name':'青海','value':2},{'name':'山东','value':46},{'name':'山西','value':15},{'name':'陕西','value':5},{'name':'上海','value':90},{'name':'四川','value':65},{'name':'天津','value':12},{'name':'西藏','value':0},{'name':'新疆','value':3},{'name':'云南','value':30},{'name':'浙江','value':50},{'name':'重庆','value':28},{'name':'内蒙古','value':0},{'name':'宁夏','value':0},{'name':'台湾','value':0},{'name':'香港','value':0}],
+
+
+]}
+
+    
+
+            option = {
+                // 创建时间条
+                baseOption: {
+                    timeline: {
+                        //采用离散型时间条
+                    axisType: 'category',
+                    //orient: 'vertical',
+                    autoPlay: true,
+                    inverse: false,
+                    playInterval: 600,
+                    left: 'center',
+                    //right: null,
+                    top: '90%',
+                    //bottom: 'bottom',
+                    width: '80%',
+                    //height: 'auto',
+                    label: {
+                        normal: {
+                            textStyle: {
+                                color: '#999'
+                            }
+                        },
+                        emphasis: {
+                            textStyle: {
+                                color: '#fff'
+                            }
+                        }
+                    },
+                    symbol: 'none',
+                    lineStyle: {
+                        color: '#555'
+                    },
+                    checkpointStyle: {
+                        color: '#bbb',
+                        borderColor: '#777',
+                        borderWidth: 2
+                    },
+                    controlStyle: {
+                        showNextBtn: false,
+                        showPrevBtn: false,
+                        normal: {
+                            color: '#666',
+                            borderColor: '#666'
+                        },
+                        emphasis: {
+                            color: '#aaa',
+                            borderColor: '#aaa'
+                        }
+                    },
+                    data: []
+                    },
+                    backgroundColor: '#333333',
+                    title: [{// 年度标签文字
+                            text: '2005',
+                            textAlign: 'center',
+                            left: '22%',
+                            top: '70%',
+                            textStyle: {
+                                fontSize: 80,
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        }, 
+                        // 标题文字
+                        {
+                        text: '莆田系医院地理分布',
+                        // subtext: 'data from USGBC (www.usgbc.org/projects)',
+                        // sublink: 'https://www.usgbc.org/projects',
+                        left: 'center',
+                        top: '3%',
+                        textStyle: {
+                            fontSize: 20,
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        }
+                        },
+                        // 注释文字
+                        {
+                        text: '',
+                        left: '10%',
+                        top: '15%',
+                        lineHeight: 56,
+                        textStyle: {
+                            fontWeight: 'normal',
+                            fontFamily: 'simhei',
+                            fontSize: 10,
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        }
+                        }],
+                        // 鼠标移至省份时的显示标签
+                        tooltip: {
+                            trigger: 'item',
+                            showDelay: 0,
+                            transitionDuration: 0.2,
+                            formatter: function (params) {
+                                var value = (params.value + '').split('.');
+                                value = value[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
+                                return params.seriesName + '<br/>' + params.name + ': ' + value;
+                            }
+                        },
+
+                        visualMap: {
+                            //orient: 'horizontal',
+                            right: '13%',
+                            bottom:'35%',                        
+                            min: 0,
+                            max: 100,
+                            inRange: {
+                            
+                                color: ['#FFFAFA','#FDFB2E','#FCC62A','#FB8F27','#FA5724']
+                            },
+                            text:['High','Low'],           // 文本，默认为数值文本
+                            textStyle: {
+                            color: '#fff'
+                            },
+                            //calculable: true
+                        },
+                        // 工具条
+                        toolbox: {
+                            show: true,
+                            //orient: 'vertical',
+                            left: 'left',
+                            top: 'top',
+                            feature: {
+                                dataView: {readOnly: false},
+                                restore: {},
+                                saveAsImage: {}
+                            }
+                        },
+              
+
+                        // 初始数据
+                        series: [
+                            {
+                                name: '1990'+'年莆田医院数量：',
+                                type: 'map',
+                                roam: false,
+                                map: 'china',
+                                itemStyle: {
+                                    emphasis:{
+                                      label:{show:true,color:'#ccccff'}}
+                                },
+                                // 调整台湾的文本标签
+                                textFixed: {
+                                // 台湾: ['50%', '50%']
+                                },
+                                data: []
+                            }
+                        ],
+
+                    animationDurationUpdate: 1500,
+                    animationEasingUpdate: 'circularIn'
+                },
+                    options: []
+    };
+
+    // debugger
+    // 按年份将数据赋值给地图填色
+    for (var n = 0; n < cnDataset.timeline.length; n++) {
+            option.baseOption.timeline.data.push(cnDataset.timeline[n]);
+            option.options.push({
+                title: {
+                    show: true,
+                    'text': cnDataset.timeline[n]
+                },
+                series: {
+                    name: cnDataset.timeline[n] + '年莆田系医院数量',
+                    type: 'map',
+                    map: 'china',
+                    data: cnDataset.totalseries[n],
+                    }
+            });
+        }
+
+        myChart.setOption(option);
+    ;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+
+       </script>
+   </body>
+</html>
